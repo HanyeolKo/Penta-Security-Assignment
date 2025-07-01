@@ -1,0 +1,23 @@
+package com.assignment.pentasecurity_be.domain.post.service.strategy;
+
+import com.assignment.pentasecurity_be.domain.post.ListType;
+import com.assignment.pentasecurity_be.domain.post.dto.PostInfiniteResponseDto;
+import com.assignment.pentasecurity_be.domain.post.entity.Post;
+import com.assignment.pentasecurity_be.domain.post.repository.PostRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Component;
+
+@Component(ListType.INFINITE)
+@RequiredArgsConstructor
+public class InfinityScrollStrategy implements PostListStrategy {
+
+    private final PostRepository postRepository;
+
+    @Override
+    public PostInfiniteResponseDto loadPosts(Pageable pageable) {
+        Page<Post> page = postRepository.findAll(pageable);
+        return PostInfiniteResponseDto.from(page);
+    }
+}
