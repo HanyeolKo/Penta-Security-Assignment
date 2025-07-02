@@ -6,6 +6,7 @@ import com.assignment.pentasecurity_be.domain.post.dto.PostResponseDto;
 import com.assignment.pentasecurity_be.domain.post.entity.Post;
 import com.assignment.pentasecurity_be.domain.post.repository.PostRepository;
 import com.assignment.pentasecurity_be.domain.post.service.strategy.LoadStrategy;
+import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -31,11 +32,6 @@ public class PostService {
     }
 
     public PostResponseDto getPostById(long id) {
-
-        if(id <= 0){
-            throw new IllegalArgumentException("ID 값은 1 이상 입니다.");
-        }
-
         Post post = postRepository.findById(id).orElseThrow(() -> new NoSuchElementException("해당 게시글이 존재하지 않습니다."));        // 404
         return PostResponseDto.from(post);
     }
