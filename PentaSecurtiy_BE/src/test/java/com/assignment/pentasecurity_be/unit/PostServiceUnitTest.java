@@ -3,7 +3,7 @@ package com.assignment.pentasecurity_be.unit;
 import com.assignment.pentasecurity_be.domain.post.ListType;
 import com.assignment.pentasecurity_be.domain.post.dto.*;
 import com.assignment.pentasecurity_be.domain.post.service.PostService;
-import com.assignment.pentasecurity_be.domain.post.service.strategy.PostListStrategy;
+import com.assignment.pentasecurity_be.domain.post.service.strategy.LoadStrategy;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -22,10 +22,10 @@ import static org.mockito.Mockito.when;
 class PostServiceUnitTest {
 
     @Mock
-    private Map<String, PostListStrategy> strategyMap;
+    private Map<String, LoadStrategy> strategyMap;
 
     @Mock
-    private PostListStrategy mockStrategy;
+    private LoadStrategy mockStrategy;
 
     @InjectMocks
     private PostService postService;

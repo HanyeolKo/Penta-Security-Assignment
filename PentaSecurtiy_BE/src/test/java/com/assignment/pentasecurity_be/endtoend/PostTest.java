@@ -46,7 +46,7 @@ public class PostTest {
 
     @Test
     void 게시글_페이징_조회(){
-        String url = "http://localhost:" + port + "/post?strategy=paging&page=0&size=10";
+        String url = "http://localhost:" + port + "/post?type=paging&page=0&size=10";
 
         ResponseEntity<PostPageResponseDto> response = this.restTemplate.exchange(
                 url,
@@ -65,7 +65,7 @@ public class PostTest {
 
     @Test
     void 게시글_무한스크롤_조회(){
-        String url = "http://localhost:" + port + "/post?strategy=infinity&page=0&size=10";
+        String url = "http://localhost:" + port + "/post?type=infinity&page=0&size=10";
 
         ResponseEntity<PostInfiniteResponseDto> response = this.restTemplate.exchange(
                 url,
@@ -98,6 +98,39 @@ public class PostTest {
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(response.getBody()).isNotNull();
         assertThat(response.getBody().title()).startsWith("Title");
+    }
+
+    @Test
+    void Spring_Validation_적용_테스트(){
+        String url1 = "http://localhost:" + port + "/post?type=1&page=0&size=10";
+        String url2 = "http://localhost:" + port + "/post?type=paging&page=-1&size=10";
+        String url3 = "http://localhost:" + port + "/post?type=paging&page=0&size=101";
+
+        ResponseEntity<PostInfiniteResponseDto> response1 = this.restTemplate.exchange(
+                url1,
+                HttpMethod.GET,
+                null,
+                new ParameterizedTypeReference<>(){}
+        );
+        ResponseEntity<PostInfiniteResponseDto> response2 = this.restTemplate.exchange(
+                url2,
+                HttpMethod.GET,
+                null,
+                new ParameterizedTypeReference<>(){}
+        );
+        ResponseEntity<PostInfiniteResponseDto> response3 = this.restTemplate.exchange(
+                url3,
+                HttpMethod.GET,
+                null,
+                new ParameterizedTypeReference<>(){}
+        );
+
+        assertThat(response1.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+        assertThat(response1.getBody()).isNotNull();
+        assertThat(response2.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+        assertThat(response2.getBody()).isNotNull();
+        assertThat(response3.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+        assertThat(response3.getBody()).isNotNull();
     }
 
 }

@@ -1,7 +1,6 @@
 package com.assignment.pentasecurity_be.exception;
 
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -30,20 +29,19 @@ public class GlobalExceptionHandler {
         );
     }
 
-
-    // 서비스 유효성 실패
-    @ExceptionHandler(ConstraintViolationException.class)
-    public ResponseEntity<?> handleConstraintViolation(ConstraintViolationException ex) {
+    // 부정확한 리스트 타입
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<?> handleConstraintViolation(IllegalArgumentException ex) {
         return ResponseEntity.badRequest().body(ErrorResponse.of(HttpStatus.BAD_REQUEST, ex.getMessage()));
     }
 
-    // 직접 예외 던진 경우
+    // 게시글이 없는 경우
     @ExceptionHandler(NoSuchElementException.class)
     public ResponseEntity<?> handleNotFound(NoSuchElementException ex) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ErrorResponse.of(HttpStatus.NOT_FOUND, ex.getMessage()));
     }
 
-    // 페이지를 찾지 못한경우
+    // 리소스를 찾지 못한경우
     @ExceptionHandler(NoResourceFoundException.class)
     public ResponseEntity<?> resourceNotFound(NoSuchElementException ex) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ErrorResponse.of(HttpStatus.NOT_FOUND, ex.getMessage()));

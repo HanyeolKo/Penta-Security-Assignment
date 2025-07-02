@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 
 @Component(ListType.PAGING)
 @RequiredArgsConstructor
-public class PagingStrategy implements PostListStrategy {
+public class PagingStrategy implements LoadStrategy {
 
     private final PostRepository postRepository;
 

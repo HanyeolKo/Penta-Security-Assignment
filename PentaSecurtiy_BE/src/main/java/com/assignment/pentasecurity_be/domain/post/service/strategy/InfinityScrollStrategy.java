@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 
 @Component(ListType.INFINITE)
 @RequiredArgsConstructor
-public class InfinityScrollStrategy implements PostListStrategy {
+public class InfinityScrollStrategy implements LoadStrategy {
 
     private final PostRepository postRepository;
 
