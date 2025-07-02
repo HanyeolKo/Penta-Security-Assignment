@@ -46,7 +46,7 @@ public class PostTest {
 
     @Test
     void 게시글_페이징_조회(){
-        String url = "http://localhost:" + port + "/post?type=paging&page=0&size=10";
+        String url = "http://localhost:" + port + "/posts?type=paging&page=0&size=10";
 
         ResponseEntity<PostPageResponseDto> response = this.restTemplate.exchange(
                 url,
@@ -65,7 +65,7 @@ public class PostTest {
 
     @Test
     void 게시글_무한스크롤_조회(){
-        String url = "http://localhost:" + port + "/post?type=infinity&page=0&size=10";
+        String url = "http://localhost:" + port + "/posts?type=infinity&page=0&size=10";
 
         ResponseEntity<PostInfiniteResponseDto> response = this.restTemplate.exchange(
                 url,
@@ -84,7 +84,7 @@ public class PostTest {
 
     @Test
     void 게시글_단건_조회(){
-        String url = "http://localhost:" + port + "/post/1";
+        String url = "http://localhost:" + port + "/posts/101";
 
         ResponseEntity<PostResponseDto> response = this.restTemplate.exchange(
                 url,
@@ -101,36 +101,42 @@ public class PostTest {
     }
 
     @Test
-    void Spring_Validation_적용_테스트(){
-        String url1 = "http://localhost:" + port + "/post?type=1&page=0&size=10";
-        String url2 = "http://localhost:" + port + "/post?type=paging&page=-1&size=10";
-        String url3 = "http://localhost:" + port + "/post?type=paging&page=0&size=101";
+    void type_파라미터_제약조건_위반_테스트() {
+        String url = "http://localhost:" + port + "/posts?type=1&page=0&size=10";
+        ResponseEntity<PostInfiniteResponseDto> response = this.restTemplate.exchange(
+                url,
+                HttpMethod.GET,
+                null,
+                new ParameterizedTypeReference<>(){}
+        );
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+        assertThat(response.getBody()).isNotNull();
+    }
 
-        ResponseEntity<PostInfiniteResponseDto> response1 = this.restTemplate.exchange(
-                url1,
+    @Test
+    void page_파라미터_음수_제약조건_위반_테스트() {
+        String url = "http://localhost:" + port + "/posts?type=paging&page=-1&size=10";
+        ResponseEntity<PostInfiniteResponseDto> response = this.restTemplate.exchange(
+                url,
                 HttpMethod.GET,
                 null,
                 new ParameterizedTypeReference<>(){}
         );
-        ResponseEntity<PostInfiniteResponseDto> response2 = this.restTemplate.exchange(
-                url2,
-                HttpMethod.GET,
-                null,
-                new ParameterizedTypeReference<>(){}
-        );
-        ResponseEntity<PostInfiniteResponseDto> response3 = this.restTemplate.exchange(
-                url3,
-                HttpMethod.GET,
-                null,
-                new ParameterizedTypeReference<>(){}
-        );
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+        assertThat(response.getBody()).isNotNull();
+    }
 
-        assertThat(response1.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
-        assertThat(response1.getBody()).isNotNull();
-        assertThat(response2.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
-        assertThat(response2.getBody()).isNotNull();
-        assertThat(response3.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
-        assertThat(response3.getBody()).isNotNull();
+    @Test
+    void size_파라미터_최대값_초과_제약조건_위반_테스트() {
+        String url = "http://localhost:" + port + "/posts?type=paging&page=0&size=101";
+        ResponseEntity<PostInfiniteResponseDto> response = this.restTemplate.exchange(
+                url,
+                HttpMethod.GET,
+                null,
+                new ParameterizedTypeReference<>(){}
+        );
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+        assertThat(response.getBody()).isNotNull();
     }
 
 }

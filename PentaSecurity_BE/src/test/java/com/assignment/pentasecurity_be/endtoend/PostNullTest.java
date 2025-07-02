@@ -3,6 +3,8 @@ package com.assignment.pentasecurity_be.endtoend;
 import com.assignment.pentasecurity_be.domain.post.dto.PostInfiniteResponseDto;
 import com.assignment.pentasecurity_be.domain.post.dto.PostPageResponseDto;
 import com.assignment.pentasecurity_be.domain.post.dto.PostResponseDto;
+import com.assignment.pentasecurity_be.domain.post.repository.PostRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -24,9 +26,18 @@ public class PostNullTest {
     @Autowired
     private TestRestTemplate restTemplate;
 
+    @Autowired
+    private PostRepository postRepository;
+
+    @BeforeEach
+    public void setup() {
+        // 자동등록 clean
+        postRepository.deleteAll();
+    }
+
     @Test
     void 게시글_페이징_조회(){
-        String url = "http://localhost:" + port + "/post?strategy=paging&page=0&size=10";
+        String url = "http://localhost:" + port + "/posts?type=paging&page=0&size=10";
 
         ResponseEntity<PostPageResponseDto> response = this.restTemplate.exchange(
                 url,
@@ -44,7 +55,7 @@ public class PostNullTest {
 
     @Test
     void 게시글_무한스크롤_조회(){
-        String url = "http://localhost:" + port + "/post?strategy=infinity&page=0&size=10";
+        String url = "http://localhost:" + port + "/posts?type=infinity&page=0&size=10";
 
         ResponseEntity<PostInfiniteResponseDto> response = this.restTemplate.exchange(
                 url,
