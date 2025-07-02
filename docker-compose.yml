@@ -3,7 +3,7 @@ version: '3.8'
 services:
   backend:
     build:
-      context: ./PentaSecurtiy_BE
+      context: ./PentaSecurity_BE
       dockerfile: Dockerfile
     ports:
       - "8080:8080"
@@ -14,7 +14,7 @@ services:
 
   frontend:
     build:
-      context: ./PentaSecurtiy_FE
+      context: ./PentaSecurity_FE
       dockerfile: Dockerfile
     ports:
       - "3000:3000"
