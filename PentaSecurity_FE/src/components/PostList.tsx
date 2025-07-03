@@ -44,6 +44,9 @@ export default function PostList({ strategy }: { strategy: Strategy }) {
     } catch (e) {
       console.error("API 요청 실패", e);
       alert("게시글을 불러오지 못했습니다.");
+      if(strategy === STRATEGIES.INFINITY) {
+        setHasMore(false); // 에러 시 추가 요청 방지
+      }
     } finally {
       setLoading(false);
     }
