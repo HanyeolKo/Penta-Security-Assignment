@@ -6,7 +6,6 @@ import com.assignment.pentasecurity_be.domain.post.dto.PostResponseDto;
 import com.assignment.pentasecurity_be.domain.post.entity.Post;
 import com.assignment.pentasecurity_be.domain.post.repository.PostRepository;
 import com.assignment.pentasecurity_be.domain.post.service.strategy.LoadStrategy;
-import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;

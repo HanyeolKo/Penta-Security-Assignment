@@ -2,6 +2,7 @@ package com.assignment.pentasecurity_be.unit;
 
 import com.assignment.pentasecurity_be.domain.post.ListType;
 import com.assignment.pentasecurity_be.domain.post.dto.*;
+import com.assignment.pentasecurity_be.domain.post.entity.Post;
 import com.assignment.pentasecurity_be.domain.post.service.PostService;
 import com.assignment.pentasecurity_be.domain.post.service.strategy.LoadStrategy;
 import org.junit.jupiter.api.BeforeEach;
@@ -26,6 +27,9 @@ class PostServiceUnitTest {
 
     @Mock
     private LoadStrategy mockStrategy;
+
+    @Mock
+    private com.assignment.pentasecurity_be.domain.post.repository.PostRepository postRepository;
 
     @InjectMocks
     private PostService postService;
@@ -71,5 +75,23 @@ class PostServiceUnitTest {
                 IllegalArgumentException.class,
                 () -> postService.getPostList(invalidStrategy, pageable)
         );
+    }
+
+    @Test
+    void 게시글_저장_성공() {
+        // given
+        PostRequestDto dto = new PostRequestDto("제목", "내용", "작성자");
+        Post post = Post.builder()
+                .title(dto.title())
+                .content(dto.content())
+                .author(dto.author())
+                .build();
+        when(postRepository.save(org.mockito.ArgumentMatchers.any(Post.class))).thenReturn(post);
+
+        // when
+        postService.save(dto);
+
+        // then
+        verify(postRepository).save(org.mockito.ArgumentMatchers.any(Post.class));
     }
 }

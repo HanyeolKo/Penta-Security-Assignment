@@ -2,6 +2,7 @@ package com.assignment.pentasecurity_be.endtoend;
 
 import com.assignment.pentasecurity_be.domain.post.dto.PostInfiniteResponseDto;
 import com.assignment.pentasecurity_be.domain.post.dto.PostPageResponseDto;
+import com.assignment.pentasecurity_be.domain.post.dto.PostRequestDto;
 import com.assignment.pentasecurity_be.domain.post.dto.PostResponseDto;
 import com.assignment.pentasecurity_be.domain.post.entity.Post;
 import com.assignment.pentasecurity_be.domain.post.repository.PostRepository;
@@ -84,7 +85,9 @@ public class PostTest {
 
     @Test
     void 게시글_단건_조회(){
-        String url = "http://localhost:" + port + "/posts/101";
+        // 첫 번째 게시글의 id를 동적으로 조회
+        Long firstPostId = postRepository.findAll().get(0).getId();
+        String url = "http://localhost:" + port + "/posts/" + firstPostId;
 
         ResponseEntity<PostResponseDto> response = this.restTemplate.exchange(
                 url,
@@ -139,4 +142,35 @@ public class PostTest {
         assertThat(response.getBody()).isNotNull();
     }
 
+    @Test
+    void 게시글_저장_성공() {
+        String url = "http://localhost:" + port + "/posts";
+        com.assignment.pentasecurity_be.domain.post.dto.PostRequestDto dto =
+                new com.assignment.pentasecurity_be.domain.post.dto.PostRequestDto("e2e 제목", "e2e 내용", "e2e 작성자");
+
+        ResponseEntity<Void> response = this.restTemplate.postForEntity(url, dto, Void.class);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+        // 저장된 게시글이 실제로 존재하는지 확인
+        boolean exists = postRepository.findAll().stream()
+                .anyMatch(p -> p.getTitle().equals("e2e 제목") && p.getContent().equals("e2e 내용") && p.getAuthor().equals("e2e 작성자"));
+        assertThat(exists).isTrue();
+    }
+
+    @Test
+    void 게시글_저장_실패_필수값_누락() {
+        String url = "http://localhost:" + port + "/posts";
+        // 제목 누락
+        PostRequestDto dto = new com.assignment.pentasecurity_be.domain.post.dto.PostRequestDto("", "e2e 내용", "e2e 작성자");
+        ResponseEntity<String> response = this.restTemplate.postForEntity(url, dto, String.class);
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+        // 내용 누락
+        dto = new com.assignment.pentasecurity_be.domain.post.dto.PostRequestDto("e2e 제목", "", "e2e 작성자");
+        response = this.restTemplate.postForEntity(url, dto, String.class);
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+        // 작성자 누락
+        dto = new com.assignment.pentasecurity_be.domain.post.dto.PostRequestDto("e2e 제목", "e2e 내용", "");
+        response = this.restTemplate.postForEntity(url, dto, String.class);
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+    }
 }

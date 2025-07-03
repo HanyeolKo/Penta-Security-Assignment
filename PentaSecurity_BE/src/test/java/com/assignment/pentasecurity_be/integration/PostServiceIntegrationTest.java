@@ -4,6 +4,7 @@ import com.assignment.pentasecurity_be.domain.post.ListType;
 import com.assignment.pentasecurity_be.domain.post.dto.PostInfiniteResponseDto;
 import com.assignment.pentasecurity_be.domain.post.dto.PostListResponse;
 import com.assignment.pentasecurity_be.domain.post.dto.PostPageResponseDto;
+import com.assignment.pentasecurity_be.domain.post.dto.PostRequestDto;
 import com.assignment.pentasecurity_be.domain.post.dto.PostResponseDto;
 import com.assignment.pentasecurity_be.domain.post.entity.Post;
 import com.assignment.pentasecurity_be.domain.post.repository.PostRepository;
@@ -76,5 +77,24 @@ public class PostServiceIntegrationTest {
         assertThat(response).isInstanceOf(PostInfiniteResponseDto.class);
         PostInfiniteResponseDto dto = (PostInfiniteResponseDto) response;
         assertThat(dto.posts().size()).isLessThanOrEqualTo(3);
+    }
+
+    @Test
+    void 게시글_저장_성공() {
+        // given
+        PostRequestDto dto =
+                new PostRequestDto("통합 제목", "통합 내용", "통합 작성자");
+
+        // when
+        postService.save(dto);
+
+        // then
+        Post saved = postRepository.findAll().stream()
+                .filter(p -> p.getTitle().equals("통합 제목"))
+                .findFirst()
+                .orElse(null);
+        assertThat(saved).isNotNull();
+        assertThat(saved.getContent()).isEqualTo("통합 내용");
+        assertThat(saved.getAuthor()).isEqualTo("통합 작성자");
     }
 }
