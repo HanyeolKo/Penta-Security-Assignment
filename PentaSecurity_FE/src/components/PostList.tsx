@@ -57,7 +57,7 @@ export default function PostList({ strategy }: { strategy: Strategy }) {
     setPosts([]);
     setTotalPages(0);
     setHasMore(true);
-    setPage(-1); // -1에서 0으로 올려 트리거
+    setPage(-1);
   }, [strategy]);
 
   // page 변경 시 loadPosts
@@ -75,7 +75,11 @@ export default function PostList({ strategy }: { strategy: Strategy }) {
 
     const observer = new IntersectionObserver(
       (entries) => {
-        if (entries[0].isIntersecting) {
+        if (
+          entries[0].isIntersecting &&
+          !loading && // 로딩 중이 아닐 때만
+          hasMore     // 더 불러올 데이터가 있을 때만
+        ) {
           setPage((prev) => prev + 1);
         }
       },
@@ -88,7 +92,7 @@ export default function PostList({ strategy }: { strategy: Strategy }) {
     return () => {
       if (target) observer.unobserve(target);
     };
-  }, [strategy, hasMore, page]);
+  }, [strategy, hasMore, loading, page]);
 
   return (
     <Box sx={{ padding: 2 }}>
