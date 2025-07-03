@@ -1,0 +1,19 @@
+= PentaSecurity 게시글 API 문서
+:toc: left
+:toclevels: 2
+:sectlinks:
+
+== 게시글 저장
+include::../../../build/generated-snippets/post-save/http-request.adoc[]
+include::../../../build/generated-snippets/post-save/request-fields.adoc[]
+include::../../../build/generated-snippets/post-save/http-response.adoc[]
+
+== 게시글 단건 조회
+include::../../../build/generated-snippets/post-get/http-request.adoc[]
+include::../../../build/generated-snippets/post-get/response-fields.adoc[]
+include::../../../build/generated-snippets/post-get/http-response.adoc[]
+
+== 게시글 리스트 조회
+include::../../../build/generated-snippets/post-list/http-request.adoc[]
+include::../../../build/generated-snippets/post-list/response-fields.adoc[]
+include::../../../build/generated-snippets/post-list/http-response.adoc[]

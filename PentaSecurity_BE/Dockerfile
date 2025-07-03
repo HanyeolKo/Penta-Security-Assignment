@@ -2,7 +2,7 @@
 FROM gradle:8.4.0-jdk21 AS builder
 WORKDIR /app
 COPY . .
-RUN gradle clean bootJar --no-daemon
+RUN gradle clean build --no-daemon
 
 #실행
 FROM eclipse-temurin:21-jre
