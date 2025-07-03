@@ -47,6 +47,11 @@ docker compose up --build
 - 별도 환경설정없이 BE, FE 모두 한번에 실행 가능합니다.
 - 프런트 페이지는 **http://{도커 주소}:3000** 로 접근 가능합니다.
 
+## 테스트 커버리지
+- 비즈니스 로직 테스트 커버리지 체크
+![image](https://github.com/user-attachments/assets/2be118d9-ba93-4393-922b-8e2091024157)
+
+
 ## 기타
 - 편의를 위해 실행시 100개의 샘플데이터가 자동으로 생성됩니다.
 - 게시글 작성기능은 프런트에서 별도로 제공하지 않으나 (post) /post {title, content, author} api는 제공됩니다.
