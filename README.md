@@ -16,6 +16,7 @@
   - H2 Database (In-memory)
   - RESTful API
   - 전략패턴 설계 및 적용
+  - Spring Rest Docs
 
 - **프론트엔드**
   - React 18+
