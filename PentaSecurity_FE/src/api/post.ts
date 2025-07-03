@@ -8,6 +8,6 @@ export const getPosts = async (
   page: number,
   strategy: Strategy
 ): Promise<PostApiResponse> => {
-  const res = await axios.get(`${BASE_URL}/post?type=${strategy}&page=${page}&size=10`);
+  const res = await axios.get(`${BASE_URL}/posts?type=${strategy}&page=${page}&size=10`);
   return res.data;
 };
